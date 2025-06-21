@@ -1,0 +1,91 @@
+body{
+ 
+    background-image: url("/static/Images/img2.png"); 
+    background-position-y: 10%;
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    height: 100vh; 
+    margin: 0;
+} 
+h1{
+    background-color: rgb(230, 240, 240, 0.4); 
+    color: rgba(230, 174, 20, 0.904);
+    font-size: 50px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding: 3%;
+    /* width: 80%;  */
+}
+div.center{
+    background-position: center c;
+}
+
+
+/* ------------------------------------------------------------ */
+.box_formulaire {
+    background: rgb(230, 240, 240, 0.2);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px rgba(230, 174, 20, 0.904);
+  
+    text-align: center;
+    width: 300px;
+}
+h2 {
+    color: black;
+}
+
+.buttons_connect_inscript {
+    margin-bottom: 15px;
+}
+
+.buttons_connect_inscript button {
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    background:  black;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.buttons_connect_inscript button:hover {
+    background:rgba(230, 174, 20, 0.904);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form input {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid rgba(230, 174, 20, 0.904);
+    border-radius: 5px;
+   
+}
+
+.form button {
+    padding: 10px;
+    background: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.form button:hover {
+    background:rgba(230, 174, 20, 0.904);
+    ;
+}
+
+/* Cache le formulaire d'inscription par défaut */
+.hidden {
+    display: none;
+}
+
+#error-input::placeholder {
+    color: red;
+    font-weight: bold;
+}

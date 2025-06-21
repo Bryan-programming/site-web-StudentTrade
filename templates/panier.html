@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>StudentTrade</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="/static/Images/test_logo.png">    <!-- le logo sera present sur toutes les pages-->
+        <link rel="stylesheet" href="/static/styles/style_offre.css">
+
+        <style>
+                    .cart-container {
+              max-width: 900px;
+              margin: auto;
+              display: flex;
+              flex-direction: column;
+              gap: 20px;
+          }
+
+          .cart-item {
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              padding: 20px;
+              border: 2px solid #ccc;
+              border-radius: 10px;
+              background-color: #fdfdfd;
+              box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+          }
+
+          .cart-info h3 {
+              margin: 0 0 10px;
+              color: #2c3e50;
+          }
+
+          .cart-info p {
+              margin: 5px 0;
+              font-size: 16px;
+              color: #555;
+          }
+
+          .delete-btn {
+              background-color: #e74c3c;
+              color: white;
+              border: none;
+              padding: 10px 14px;
+              border-radius: 8px;
+              cursor: pointer;
+              font-size: 14px;
+          }
+
+          .delete-btn:hover {
+                transition: all 0.5s ease;
+                transform: scale(1.3);
+          }
+
+          .cart-total {
+              margin-top: 20px;
+              text-align: right;
+              font-size: 20px;
+              font-weight: bold;
+              color: #2c3e50;
+              padding-right: 20px;
+          }
+
+          /* _____________________ */
+             
+        .product-container {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .product-image img {
+            width: 300px;
+            height: auto;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+
+        .product-details {
+            flex-grow: 1;
+        }
+
+        .product-details h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .product-details p {
+            margin: 6px 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        </style>
+        
+    </head>
+    <body>
+        <header class="taskbar">
+            <a href="/acceuil.html" target="_parent">
+                <img src="/static/Images/test_logo.png" width=50px height=70px title="revenir à la page d'acceuil" alt=" Image non chargé">
+            </a>
+               <form class="search-bar" action="/search" method="get" enctype="multipart/form-data">
+                <input type="text" name="recherche" placeholder=" search"  required />
+                <input type="submit" value="Rechercher" id="button_rechercher"/>
+              </form>
+              <a href="/panier">
+                <img src="/static/Images/panier.png" width="50" height="70" alt="Icone utilisateur" class="icon-right">
+              </a>
+        </header>
+            <div>
+                <nav>
+                    <button class="button" id="button_offre">Offres</button>
+                    <button class="button" id="button_ajouter_offre">Ajouter une offre</button>
+                    <button class="button" id="button_suggestion">Suggestions</button>
+                    <button class="button" id="button_notification">Notification</button>
+                    <button class="button" id="button_contact">Contact</button>
+                    <button class="button" id="button_aide">Aide</button>
+                    <button class="button" id="button_profil">Profil</button>
+                    <button class="button" id="button_log_out">Log out</button>
+                </nav> 
+            </div>
+
+            <main>
+
+            <section>
+  
+                <br><br><br>
+                <h2 style="text-align:center;">🛒 Mon Panier</h2>
+
+                <br><br><br>
+
+                <div style="max-width: 800px; margin: auto;">
+                    {% for item in items %}
+                        <div class="product-container" style="border: 1px solid #ccc; padding: 15px; margin: 10px 0; border-radius: 8px; background-color: #fdfdfd;">
+                          
+                          <div  class="product-image"> 
+                            <img class="image" src="/{{ item.produit.image_item}}" alt="Image de {{ item.produit.name_item }}" width="300px" height="300px">
+                          </div>
+                          <div class="product-details">
+                          <h3>{{ item.produit.name_item }}</h3>
+                            <p><strong>Quantité ajouté:</strong> {{ item.quantite }}</p>
+                            <p  style="background-color: #fbf9f8"><strong>En Stock:</strong> {{ item.produit.quantity_item }}</p>
+                            <p><strong>Prix unitaire :</strong> {{ item.produit.price_item }} €</p>
+                            <p><strong>Sous-total :</strong> {{ item.sous_total }} €</p> 
+                            <p><strong>Publié par :</strong> {{ item.utilisateur.username }}</p>                                                       
+
+                            <form method="post" action="/panier/supprimer/{{ item.produit.id_item }}" >
+                                <button type="submit" class="delete-btn" style="background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+                                    🗑 Supprimer
+                                </button>
+                            </form><br>
+
+                            <form method="post" action="/panier/ajouter/{{ item.produit.id_item }}">
+                                <button type="submit"  class="delete-btn" style="background-color: #070707; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+                                    + Ajouter
+                                </button>
+                            </form><br>
+
+                            <form method="post"  action="/panier/commander" onsubmit="return confirmation_commande();">
+                                <input type="hidden" name="Nom_produit" value="{{item.produit.name_item}}">
+                                <input type="hidden" name="Prix_unitaire" value="{{item.produit.price_item}}">
+                                <input type="hidden" name="Nom_vendeur" value="{{item.utilisateur.username}}">
+                                <input type="hidden" name="Email_vendeur" value="{{item.utilisateur.email}}">
+                                <input type="hidden" name="Id_item" value="{{item.produit.id_item}}">
+                                <input type="hidden" name="Quantite" value="{{item.quantite}}">
+                                <input type="hidden" name="id_commande" value="{{item.id_commande}}">
+                                <input type="hidden" name="id_vendeur" value="{{item.utilisateur.id_utilisateur}}">
+                                 <button type="submit" class="delete-btn" style="background-color:  rgba(230, 174, 20, 0.904); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+                                    Commander
+                                </button>
+                              </form>
+                          </div>
+                            
+                          <form method="post" action="/contact_seller" onsubmit="return confirmation_message();">
+                            <input type="hidden" name="email_vendeur" value="{{item.utilisateur.email}}">
+                            <input type="hidden" name="produit" value="{{item.produit.name_item}}">
+                            <input type="hidden" name="nom_vendeur" value="{{item.utilisateur.username}}">
+                            <input type="hidden" name="id_vendeur" value="{{item.utilisateur.id_utilisateur}}">
+                            <label for="message"><strong>Envoyer un message au vendeur :</strong></label>
+                            <textarea name="message" placeholder="Écrivez votre message ici..." required></textarea>
+                            <button type="submit" class="delete-btn" style="background-color:  rgba(230, 174, 20, 0.904); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Envoyer</button>
+                          </form>
+                            
+                        </div>
+                    {% endfor %}
+
+                    {% if total_global > 0 %}
+                        <div style="text-align: right; font-weight: bold; font-size: 20px; margin-top: 20px;">
+                            ✅ Total général : {{ total_global }} €
+                        </div>
+                    {% else %}
+                        <br><br><br><br><br><br><br><br><p style="text-align: center;">Votre panier est vide.</p><br><br><br><br><br><br><br><b></b>
+                    {% endif %}
+                </div>
+
+        
+            </section>
+            <section class="bas_de_page">
+              <figure class="image_bas_de_page">
+                <div class="reassurance__img">
+                  <img
+                    src="/static/Images/004-padlock.png"
+                    alt="Site Securisé"
+                  />
+                </div>
+      
+                <figcaption>Site Sécurisé</figcaption>
+              </figure>
+              <figure class="image_bas_de_page">
+                <div class=>
+                  <img
+                    src="/static/Images/001-parcel.png"
+                    alt="Service de livraison"/>
+                    
+                </div>
+      
+                <figcaption>
+                  service de Livraison disponible 24H/24
+                </figcaption>
+              </figure>
+              <figure class="image_bas_de_page">
+                <div>
+                  <img src="/static/Images/002-badge.png" alt="Qualité Garantie" />
+                </div>
+      
+                <figcaption>Qualité Garantie</figcaption>
+              </figure>
+              <figure class="image_bas_de_page">
+                <div class="reassurance__img">
+                  <img
+                    src="/static/Images/003-support.png"
+                    alt="Notre équipe à votre écoute"/>
+                </div>
+      
+                <figcaption >
+                  Notre équipe à votre écoute
+                </figcaption>
+              </figure>
+            </section>
+            
+            </main>
+            <footer>
+      <div class="footer_info">
+        <div>
+          <h3 class="footer_info_title">A propos</h3>
+          <ul>
+            <li>Fonctionnement du site</li>
+            <li>Conditions générales de vente</li>
+            <li>Données et Confidentialité</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer_info_title">Assistance</h3>
+          <ul>
+            <li>Centre D'aide</li>
+            <li>Nous Contacter</li>
+            <a href="https://fr-fr.facebook.com/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/Facebook_logo_(square).png" alt="facebook" width="30" height="30"></a>
+            <a href="https://twitter.com/login" target="_blank"><img src="https://th.bing.com/th/id/OIP.QmI9S2QNqq1ysjWdhMWxtQHaHa?w=158&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Twitter" width="30" height="30"></a>
+            <a href="https://www.instagram.com/" target="_blank"><img src="https://th.bing.com/th/id/OIP.4bd2OBuugOExTZDZTpkrWQHaHY?w=250&h=249&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2"alt="Instagram" width="30" height="30"></a>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+           <script src="/static/Script/script_acceuil.js"></script>    
+    </body>
+</html>  
